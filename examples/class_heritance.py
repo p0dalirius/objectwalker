@@ -21,6 +21,6 @@ class B(A):
 B_obj = B()
 
 print("[>] Starting to explore ...")
-ow = objectwalker.core.ObjectWalker(filters=[FilterObjIsBuiltinFunctionOrMethod()], verbose=False)
+ow = objectwalker.core.ObjectWalker(filters=[FilterTypeIsBuiltinFunctionOrMethod()], verbose=False)
 ow.walk(B_obj, path=["B_obj"])
 print("[>] all done!")
