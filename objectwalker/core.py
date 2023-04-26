@@ -9,9 +9,10 @@ class ObjectWalker(object):
     Documentation for class ObjectWalker
     """
 
-    def __init__(self, filters=[], verbose=False):
+    def __init__(self, filters=[], verbose=False, no_colors=False):
         super(ObjectWalker, self).__init__()
         self.verbose = verbose
+        self.no_colors = no_colors
         self.filters = filters
         self.knownids = [id(self)] + [id(f) for f in filters]
 
@@ -32,12 +33,14 @@ class ObjectWalker(object):
 
                     if any([f.check(subobj, path_to_obj) for f in self.filters]):
                         # Print the found path
-                        if self.verbose:
-                            print("%s" % ('.'.join(path_to_obj)))
+                        if self.no_colors:
+                            print("[%-50s] [type=%s] | %s" % (str(subobj)[:50], str(type(subobj)), '.'.join(path_to_obj)))
                         else:
-                            print("%s" % ('.'.join(path_to_obj)))
+                            print("[\x1b[94m%-50s\x1b[0m] [\x1b[95mtype=%s\x1b[0m] | \x1b[93m%s\x1b[0m" % (str(subobj)[:50], str(type(subobj)), '.'.join(path_to_obj)))
                         # Save the found path
                         found.append(path_to_obj)
+                    elif self.verbose:
+                        print("[SKIPPED] %s" % ('.'.join(path_to_obj)))
 
                     # Explore further
                     if id(subobj) not in self.knownids:
@@ -46,4 +49,5 @@ class ObjectWalker(object):
 
                 except AttributeError as e:
                     pass
+
         return found

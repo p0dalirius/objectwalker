@@ -5,4 +5,4 @@
 # Date created       : 26 Apr 2023
 
 from .core import *
-from objectwalker.filters.filter_object import *
+from objectwalker.filters import *
