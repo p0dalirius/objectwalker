@@ -20,8 +20,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author_email="podalirius@protonmail.com",
-    packages=["objectwalker"],
-    package_data={'objectwalker': ['objectwalker/']},
+    packages=["objectwalker", "objectwalker.filters"],
+    package_data={'objectwalker': ['objectwalker/', 'objectwalker/filters/']},
     include_package_data=True,
     license="GPL2",
     classifiers=[
