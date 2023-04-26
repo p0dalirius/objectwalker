@@ -13,7 +13,7 @@ with open('requirements.txt', 'r', encoding='utf-8') as f:
 
 setuptools.setup(
     name="objectwalker",
-    version="1.8",
+    version="1.9",
     description="",
     url="https://github.com/p0dalirius/objectwalker",
     author="Podalirius",

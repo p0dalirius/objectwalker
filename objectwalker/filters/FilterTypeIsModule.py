@@ -43,7 +43,7 @@ class FilterTypeIsModule(EmptyFilter):
 
         if self.no_colors:
             print("[%s] [module=%s] [module_type=%s] | %s" % (
-                    self.__filter_name,
+                    self.filter_name,
                     module_name,
                     module_type,
                     '.'.join(path_to_obj)
@@ -51,7 +51,7 @@ class FilterTypeIsModule(EmptyFilter):
             )
         else:
             print("[\x1b[95m%s\x1b[0m] [module=\x1b[1;91m%s\x1b[0m] [module_type=\x1b[94m%s\x1b[0m] | \x1b[1;92m%s\x1b[0m"  % (
-                    self.__filter_name,
+                    self.filter_name,
                     module_name,
                     module_type,
                     '.'.join(path_to_obj)

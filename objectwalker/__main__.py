@@ -10,7 +10,7 @@ import objectwalker
 from objectwalker.filters import *
 
 
-VERSION = "1.8"
+VERSION = "1.9"
 
 
 banner = r"""
@@ -36,11 +36,17 @@ def parseArgs():
 
     # Objects
     group_filters_objects = parser.add_argument_group("Filters on objects")
+    group_filters_objects.add_argument("--filter-object-is-module", default=[], type=str, action="append", help="Show paths from the base object leading to a specific module.")
+    #
     group_filters_objects.add_argument("--filter-object-name-equals", default=[], type=str, action="append", help="Show paths from the base object leading to an object name equals to <string>.")
     group_filters_objects.add_argument("--filter-object-name-contains", default=[], type=str, action="append", help="Show paths from the base object leading to an object name containing <string>.")
     group_filters_objects.add_argument("--filter-object-name-startswith", default=[], type=str, action="append", help="Show paths from the base object leading to an object name starting with <string>.")
     group_filters_objects.add_argument("--filter-object-name-endswith", default=[], type=str, action="append", help="Show paths from the base object leading to an object name ending with <string>.")
-    group_filters_objects.add_argument("--filter-object-is-module", default=[], type=str, action="append", help="Show paths from the base object leading to a specific module.")
+    #
+    group_filters_objects.add_argument("--filter-object-value-equals", default=[], type=str, action="append", help="Show paths from the base object leading to an object value equals to <string>.")
+    group_filters_objects.add_argument("--filter-object-value-contains", default=[], type=str, action="append", help="Show paths from the base object leading to an object value containing <string>.")
+    group_filters_objects.add_argument("--filter-object-value-startswith", default=[], type=str, action="append", help="Show paths from the base object leading to an object value starting with <string>.")
+    group_filters_objects.add_argument("--filter-object-value-endswith", default=[], type=str, action="append", help="Show paths from the base object leading to an object value ending with <string>.")
 
     # Paths
     group_filters_paths = parser.add_argument_group("Filters on paths")
@@ -76,7 +82,7 @@ def main():
     if options.filter_type_builtin_function_or_method:
         filters.append(FilterTypeIsBuiltinFunctionOrMethod(no_colors=options.no_colors))
 
-    # Filters on objects
+    # Filters on object names
     if len(options.filter_object_name_equals) != 0:
         filters.append(FilterObjectNameEquals(values=options.filter_object_name_equals, no_colors=options.no_colors))
     if len(options.filter_object_name_contains) != 0:
@@ -85,6 +91,16 @@ def main():
         filters.append(FilterObjectNameStartsWith(values=options.filter_object_name_startswith, no_colors=options.no_colors))
     if len(options.filter_object_name_endswith) != 0:
         filters.append(FilterObjectNameEndsWith(values=options.filter_object_name_endswith, no_colors=options.no_colors))
+
+    # Filters on object values
+    if len(options.filter_object_value_equals) != 0:
+        filters.append(FilterObjectValueEquals(values=options.filter_object_value_equals, no_colors=options.no_colors))
+    if len(options.filter_object_value_contains) != 0:
+        filters.append(FilterObjectValueContains(values=options.filter_object_value_contains, no_colors=options.no_colors))
+    if len(options.filter_object_value_startswith) != 0:
+        filters.append(FilterObjectValueStartsWith(values=options.filter_object_value_startswith, no_colors=options.no_colors))
+    if len(options.filter_object_value_endswith) != 0:
+        filters.append(FilterObjectValueEndsWith(values=options.filter_object_value_endswith, no_colors=options.no_colors))
 
     # Filters on paths
     if len(options.filter_path_contains) != 0:
