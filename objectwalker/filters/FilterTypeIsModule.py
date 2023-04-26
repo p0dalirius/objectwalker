@@ -18,7 +18,6 @@ class FilterTypeIsModule(EmptyFilter):
 
     def __init__(self, modules=[], no_colors=False):
         super(FilterTypeIsModule, self).__init__()
-        print(dir(self))
         self.__filter_name = __name__.split('.')[-1]
         self.no_colors = no_colors
         self.modules = modules
@@ -36,7 +35,6 @@ class FilterTypeIsModule(EmptyFilter):
         if matches_filter:
             self.print_result(obj, path_to_obj)
         return matches_filter
-
 
     def print_result(self, obj, path_to_obj):
         # Print the found path

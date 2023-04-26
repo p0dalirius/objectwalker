@@ -1,31 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# File name          : FilterObjNameEq.py
+# File name          : FilterObjectNameContains.py
 # Author             : Podalirius (@podalirius_)
 # Date created       : 26 Apr 2023
 
 from .EmptyFilter import EmptyFilter
 
 
-class FilterObjNameEq(EmptyFilter):
+class FilterObjectNameContains(EmptyFilter):
     """
-    Documentation for class FilterObjNameEq
+    Documentation for class FilterObjectNameContains
     """
     values = []
     no_colors = False
 
     def __init__(self, values, no_colors=False):
-        super(EmptyFilter, self).__init__()
+        super(FilterObjectNameContains, self).__init__()
         self.__filter_name = __name__.split('.')[-1]
         self.no_colors = no_colors
         self.values = values
 
     def check(self, obj, path_to_obj):
         matches_filter = False
-        for element in path_to_obj:
-            for value in self.values:
-                if value == element:
-                    matches_filter = True
-                    self.print_result(obj, path_to_obj)
-                    return matches_filter
+
+        if any([(value in str(path_to_obj[-1])) for value in self.values]):
+            matches_filter = True
+
+        if matches_filter:
+            self.print_result(obj, path_to_obj)
         return matches_filter
+
+    def __repr__(self):
+        return "<%s values=%s>" % (self.__filter_name, self.values)

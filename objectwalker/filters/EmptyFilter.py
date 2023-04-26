@@ -23,7 +23,7 @@ class EmptyFilter(object):
     def print_result(self, obj, path_to_obj):
         # Print the found path
         obj_value = str(obj)[:50]
-        obj_value = bytes(obj_value, 'utf-8')[2:-1]
+        obj_value = str(bytes(obj_value, 'utf-8'))[2:-1]
 
         if self.no_colors:
             print("[%s] [type=%s] [value=%s] | %s" % (
