@@ -40,4 +40,3 @@ class FilterObjNameContains(object):
                     matches_filter = True
                     return matches_filter
         return matches_filter
-

@@ -15,7 +15,6 @@ class FilterObjIsModule(object):
     def check(self, obj, path_to_obj):
         matches_filter = False
         str_obj = str(obj)
-        print(str(type(obj)))
         if str(type(obj)) == "<class 'module'>":
             matches_filter = True
             return matches_filter
@@ -33,7 +32,6 @@ class FilterObjIsMethodWrapper(object):
     def check(self, obj, path_to_obj):
         matches_filter = False
         str_obj = str(obj)
-        print(str(type(obj)))
         if str(type(obj)) == "<class 'method-wrapper'>":
             matches_filter = True
             return matches_filter
@@ -51,7 +49,6 @@ class FilterObjIsBuiltinFunctionOrMethod(object):
     def check(self, obj, path_to_obj):
         matches_filter = False
         str_obj = str(obj)
-        print(str(type(obj)))
         if str(type(obj)) == "<class 'builtin_function_or_method'>":
             matches_filter = True
             return matches_filter
