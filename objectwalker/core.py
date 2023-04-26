@@ -32,11 +32,7 @@ class ObjectWalker(object):
                     path_to_obj = path+[subkey]
 
                     if any([f.check(subobj, path_to_obj) for f in self.filters]):
-                        # Print the found path
-                        if self.no_colors:
-                            print("[%-50s] [type=%s] | %s" % (str(subobj)[:50], str(type(subobj)), '.'.join(path_to_obj)))
-                        else:
-                            print("[\x1b[94m%-50s\x1b[0m] [\x1b[95mtype=%s\x1b[0m] | \x1b[93m%s\x1b[0m" % (str(subobj)[:50], str(type(subobj)), '.'.join(path_to_obj)))
+
                         # Save the found path
                         found.append(path_to_obj)
                     elif self.verbose:

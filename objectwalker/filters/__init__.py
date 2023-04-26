@@ -4,5 +4,20 @@
 # Author             : Podalirius (@podalirius_)
 # Date created       : 26 Apr 2023
 
-from .filter_types import FilterObjIsModule, FilterObjIsMethodWrapper, FilterObjIsBuiltinFunctionOrMethod
-from .filter_object import FilterObjNameEq, FilterObjNameContains
+# Generic base filter
+from .EmptyFilter import EmptyFilter
+
+# Filters on object
+from .FilterObjNameEq import FilterObjNameEq
+from .FilterObjNameContains import FilterObjNameContains
+
+# Filters on path
+from .FilterPathContains import FilterPathContains
+from .FilterPathStartsWith import FilterPathStartsWith
+from .FilterPathEndsWith import FilterPathEndsWith
+
+# Filters on type
+from .FilterTypeIsModule import FilterTypeIsModule
+from .FilterTypeIsMethodWrapper import FilterTypeIsMethodWrapper
+from .FilterTypeIsBuiltinFunctionOrMethod import FilterTypeIsBuiltinFunctionOrMethod
+
