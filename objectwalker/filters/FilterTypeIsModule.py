@@ -16,9 +16,10 @@ class FilterTypeIsModule(EmptyFilter):
     modules = []
     no_colors = False
 
+    filter_name = "FilterTypeIsModule"
+
     def __init__(self, modules=[], no_colors=False):
         super(FilterTypeIsModule, self).__init__()
-        self.__filter_name = __name__.split('.')[-1]
         self.no_colors = no_colors
         self.modules = modules
 
@@ -67,3 +68,6 @@ class FilterTypeIsModule(EmptyFilter):
             else:
                 module_type = module_type.strip("()")
         return module_name, module_type, module_source_file
+
+    def __repr__(self):
+        return "<%s>" % self.filter_name

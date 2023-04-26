@@ -11,10 +11,11 @@ class EmptyFilter(object):
 
     no_colors = False
 
+    filter_name = "EmptyFilter"
+
     def __init__(self, no_colors=False):
         super(EmptyFilter, self).__init__()
         self.no_colors = no_colors
-        self.__filter_name = __name__.split('.')[-1]
 
     def check(self, obj, path_to_obj):
         self.print_result(obj, path_to_obj)
@@ -27,7 +28,7 @@ class EmptyFilter(object):
 
         if self.no_colors:
             print("[%s] [type=%s] [value=%s] | %s" % (
-                    self.__filter_name,
+                    self.filter_name,
                     str(type(obj)),
                     obj_value,
                     '.'.join(path_to_obj)
@@ -35,9 +36,12 @@ class EmptyFilter(object):
             )
         else:
             print("[\x1b[95m%s\x1b[0m] [type=\x1b[1;91m%s\x1b[0m] [value=\x1b[94m%s\x1b[0m] | \x1b[1;92m%s\x1b[0m"  % (
-                    self.__filter_name,
+                    self.filter_name,
                     str(type(obj)),
                     obj_value,
                     '.'.join(path_to_obj)
                 )
             )
+
+    def __repr__(self):
+        return "<%s>" % self.filter_name

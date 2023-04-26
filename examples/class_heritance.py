@@ -13,14 +13,9 @@ class A(object):
     def __init__(self):
         super(A, self).__init__()
 
-class B(A):
-    def __init__(self):
-        super(B, self).__init__()
-
-
-B_obj = B()
+A_obj = A()
 
 print("[>] Starting to explore ...")
-ow = objectwalker.core.ObjectWalker(filters=[FilterTypeIsBuiltinFunctionOrMethod()], verbose=False)
-ow.walk(B_obj, path=["B_obj"])
-print("[>] all done!")
+ow = objectwalker.core.ObjectWalker(filters=[FilterObjectNameContains(values=["SECRET"])], verbose=False)
+ow.walk(A_obj, path=["A_obj"], maxdepth=5)
+print("[>] All done!")

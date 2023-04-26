@@ -14,9 +14,10 @@ class FilterPathContains(EmptyFilter):
     values = []
     no_colors = False
 
+    filter_name = "FilterPathContains"
+
     def __init__(self, values, no_colors=False):
         super(EmptyFilter, self).__init__()
-        self.__filter_name = __name__.split('.')[-1]
         self.no_colors = no_colors
         self.values = values
 
@@ -29,3 +30,6 @@ class FilterPathContains(EmptyFilter):
         if matches_filter:
             self.print_result(obj, path_to_obj)
         return matches_filter
+
+    def __repr__(self):
+        return "<%s values=%s>" % (self.filter_name, self.values)
