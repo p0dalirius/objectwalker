@@ -28,6 +28,15 @@ You can now install it from pypi (latest version is <img alt="PyPI" src="https:/
 sudo python3 -m pip install objectwalker
 ```
 
+## Example commands
+
+ + We want to find all the paths to the `os` module in the module `jinja2`:
+    ```
+    objectwalker -m jinja2 --filter-object-is-module os --max-depth 15
+    ```
+    We get the following output:
+    ![](./.github/find_module_os_in_jinja2.png)
+
 ## Contributing
 
 Pull requests are welcome. Feel free to open an issue if you want to add other features.
