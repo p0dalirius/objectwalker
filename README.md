@@ -1,5 +1,7 @@
 # objectwalker
 
+A python module to explore the object tree to extract paths to interesting objects 
+
 ## Installation
 
 You can now install it from pypi (latest version is <img alt="PyPI" src="https://img.shields.io/pypi/v/objectwalker">) with this command:
