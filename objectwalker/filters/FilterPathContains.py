@@ -22,9 +22,10 @@ class FilterPathContains(EmptyFilter):
 
     def check(self, obj, path_to_obj):
         matches_filter = False
-        for element in path_to_obj:
-            for value in self.values:
-                if value in element:
-                    matches_filter = True
-                    return matches_filter
+
+        if any([value in '.'.join(path_to_obj) for value in self.values]):
+            matches_filter = True
+
+        if matches_filter:
+            self.print_result(obj, path_to_obj)
         return matches_filter
