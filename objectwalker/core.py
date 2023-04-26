@@ -37,6 +37,8 @@ class ObjectWalker(object):
                                 subobj = eval('obj["%s"]' % subkey, {"obj": obj})
                         except SyntaxError as e:
                             continue
+                        except KeyError as e:
+                            continue
 
                         path_to_obj = path[:]
                         if type(subkey) == int:
@@ -68,6 +70,8 @@ class ObjectWalker(object):
                             subobj = eval("obj[%d]" % index, {"obj": obj})
                         except SyntaxError as e:
                             continue
+                        except KeyError as e:
+                            continue
 
                         path_to_obj = path[:]
                         path_to_obj[-1] += "[%d]" % index
@@ -93,6 +97,8 @@ class ObjectWalker(object):
                         try:
                             subobj = eval("obj.%s" % subkey, {"obj": obj})
                         except SyntaxError as e:
+                            continue
+                        except KeyError as e:
                             continue
 
                         path_to_obj = path + [subkey]
