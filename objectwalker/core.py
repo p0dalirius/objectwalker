@@ -35,8 +35,8 @@ class ObjectWalker(object):
 
                         # Save the found path
                         found.append(path_to_obj)
-                    elif self.verbose:
-                        print("[SKIPPED] %s" % ('.'.join(path_to_obj)))
+                    # elif self.debug:
+                    #     print("[SKIPPED] %s" % ('.'.join(path_to_obj)))
 
                     # Explore further
                     if id(subobj) not in self.knownids:

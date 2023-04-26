@@ -8,8 +8,10 @@
 from .EmptyFilter import EmptyFilter
 
 # Filters on object
-from .FilterObjNameEq import FilterObjNameEq
-from .FilterObjNameContains import FilterObjNameContains
+from .FilterObjectNameEquals import FilterObjectNameEquals
+from .FilterObjectNameContains import FilterObjectNameContains
+from .FilterObjectNameStartsWith import FilterObjectNameStartsWith
+from .FilterObjectNameEndsWith import FilterObjectNameEndsWith
 
 # Filters on path
 from .FilterPathContains import FilterPathContains
