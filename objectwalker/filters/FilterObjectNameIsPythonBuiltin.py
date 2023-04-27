@@ -6,6 +6,11 @@
 
 from .EmptyFilter import EmptyFilter
 
+class DummyEmptyClass(object):
+    pass
+
+def DummyEmptyFunction():
+    pass
 
 class FilterObjectNameIsPythonBuiltin(EmptyFilter):
     """
@@ -17,16 +22,22 @@ class FilterObjectNameIsPythonBuiltin(EmptyFilter):
 
     filter_name = "FilterObjectNameIsPythonBuiltin"
 
-    def __init__(self, no_colors=False):
+    def __init__(self, keep_gadgets=True, no_colors=False):
         super(FilterObjectNameIsPythonBuiltin, self).__init__()
         self.callback = self.print_result
         self.no_colors = no_colors
 
         # Load builtin python functions
         self.values = []
-        for obj in [0, "str", [1, 2, 3], (1, 2, 3), True, None]:
+        for obj in [0, "str", [1, 2, 3], (1, 2, 3), True, None, DummyEmptyClass(), DummyEmptyFunction]:
             self.values += [e for e in dir(obj) if e.startswith('__') and e.endswith('__')]
         self.values = list(sorted(set(self.values)))
+
+        if keep_gadgets:
+            gadgets = ["__call__", "__class__", "_init__", "__init_subclass__", "__subclasshook__", "__weakref__", "__self__", "__object__"]
+            for g in gadgets:
+                while g in self.values:
+                    self.values.remove(g)
 
     def check(self, obj, path_to_obj):
         matches_filter = False
