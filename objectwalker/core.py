@@ -16,12 +16,17 @@ class ObjectWalker(object):
         super(ObjectWalker, self).__init__()
         self.verbose = verbose
         self.no_colors = no_colors
+
+        # Filters
         self.filters_accept = filters_accept
         self.filters_reject = filters_reject
         if len(self.filters_accept) == 0 and len(self.filters_reject) == 0:
             self.filters_accept = [EmptyFilter()]
         self.knownids = [id(self)] + [id(f) for f in filters_accept] + [id(f) for f in filters_reject]
-        self.set_callback(callback)
+
+        # Callback
+        if callback is not None:
+            self.set_callback(callback)
 
     def walk(self, obj, path=[], depth=0, maxdepth=3, verbose=False, method="breadth"):
         if "breadth" in method.strip().lower():
@@ -247,6 +252,8 @@ class ObjectWalker(object):
     
     def set_callback(self, fcallback):
         self.callback = fcallback
-        for f in self.filters:
+        for f in self.filters_accept:
             f.set_callback(fcallback)
+        for f in self.filters_reject:
+            f.set_callback(None)
     

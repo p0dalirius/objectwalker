@@ -161,4 +161,4 @@ ow = objectwalker.core.ObjectWalker(filters_accept=[FilterPathEndsWith(values=["
 ow.walk(base, path=["base"], maxdepth=5, method="depth")
 print("[>] All done!")
 
-breakpoint()
+# breakpoint()

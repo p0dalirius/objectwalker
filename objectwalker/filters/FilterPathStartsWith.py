@@ -18,6 +18,7 @@ class FilterPathStartsWith(EmptyFilter):
 
     def __init__(self, values, no_colors=False):
         super(EmptyFilter, self).__init__()
+        self.callback = self.print_result
         self.no_colors = no_colors
         self.values = values
 
@@ -28,7 +29,9 @@ class FilterPathStartsWith(EmptyFilter):
             matches_filter = True
 
         if matches_filter:
-            self.print_result(obj, path_to_obj)
+            if self.callback is not None:
+                self.callback(obj, path_to_obj)
+
         return matches_filter
 
     def __repr__(self):

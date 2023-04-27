@@ -19,6 +19,7 @@ class FilterObjectNameIsPythonBuiltin(EmptyFilter):
 
     def __init__(self, no_colors=False):
         super(FilterObjectNameIsPythonBuiltin, self).__init__()
+        self.callback = self.print_result
         self.no_colors = no_colors
 
         # Load builtin python functions
@@ -34,7 +35,9 @@ class FilterObjectNameIsPythonBuiltin(EmptyFilter):
             matches_filter = True
 
         if matches_filter:
-            self.print_result(obj, path_to_obj)
+            if self.callback is not None:
+                self.callback(obj, path_to_obj)
+
         return matches_filter
 
     def __repr__(self):
