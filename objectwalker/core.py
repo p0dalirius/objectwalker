@@ -4,17 +4,23 @@
 # Author             : Podalirius (@podalirius_)
 # Date created       : 26 Apr 2023
 
+from .filters.EmptyFilter import EmptyFilter
+
+
 class ObjectWalker(object):
     """
     Documentation for class ObjectWalker
     """
 
-    def __init__(self, filters=[], callback=None, verbose=False, no_colors=False):
+    def __init__(self, filters_accept=[], filters_reject=[], callback=None, verbose=False, no_colors=False):
         super(ObjectWalker, self).__init__()
         self.verbose = verbose
         self.no_colors = no_colors
-        self.filters = filters
-        self.knownids = [id(self)] + [id(f) for f in filters]
+        self.filters_accept = filters_accept
+        self.filters_reject = filters_reject
+        if len(self.filters_accept) == 0 and len(self.filters_reject) == 0:
+            self.filters_accept = [EmptyFilter()]
+        self.knownids = [id(self)] + [id(f) for f in filters_accept] + [id(f) for f in filters_reject]
         self.set_callback(callback)
 
     def walk(self, obj, path=[], depth=0, maxdepth=3, verbose=False, method="breadth"):
@@ -56,7 +62,7 @@ class ObjectWalker(object):
                         else:
                             path_to_obj[-1] += '["%s"]' % subkey
 
-                        if any([f.check(subobj, path_to_obj) for f in self.filters]):
+                        if any([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
                             # Save the found path
                             found.append(path_to_obj)
 
@@ -82,7 +88,7 @@ class ObjectWalker(object):
                         path_to_obj = path[:]
                         path_to_obj[-1] += "[%d]" % index
 
-                        if any([f.check(subobj, path_to_obj) for f in self.filters]):
+                        if any([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
                             # Save the found path
                             found.append(path_to_obj)
 
@@ -107,7 +113,7 @@ class ObjectWalker(object):
 
                         path_to_obj = path + [subkey]
 
-                        if any([f.check(subobj, path_to_obj) for f in self.filters]):
+                        if any([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
                             # Save the found path
                             found.append(path_to_obj)
 
@@ -150,7 +156,7 @@ class ObjectWalker(object):
                         else:
                             path_to_obj[-1] += '["%s"]' % subkey
 
-                        if any([f.check(subobj, path_to_obj) for f in self.filters]):
+                        if any([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
                             # Save the found path
                             found.append(path_to_obj)
 
@@ -176,7 +182,7 @@ class ObjectWalker(object):
                         path_to_obj = path[:]
                         path_to_obj[-1] += "[%d]" % index
 
-                        if any([f.check(subobj, path_to_obj) for f in self.filters]):
+                        if any([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
                             # Save the found path
                             found.append(path_to_obj)
 
@@ -201,7 +207,7 @@ class ObjectWalker(object):
 
                         path_to_obj = path + [subkey]
 
-                        if any([f.check(subobj, path_to_obj) for f in self.filters]):
+                        if any([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
                             # Save the found path
                             found.append(path_to_obj)
 
