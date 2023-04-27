@@ -12,6 +12,7 @@ from .FilterObjectNameEquals import FilterObjectNameEquals
 from .FilterObjectNameContains import FilterObjectNameContains
 from .FilterObjectNameStartsWith import FilterObjectNameStartsWith
 from .FilterObjectNameEndsWith import FilterObjectNameEndsWith
+from .FilterObjectNameIsPythonBuiltin import FilterObjectNameIsPythonBuiltin
 
 # Filters on object values
 from .FilterObjectValueEquals import FilterObjectValueEquals
