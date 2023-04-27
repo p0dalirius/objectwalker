@@ -11,7 +11,7 @@ import sys
 
 print("[>] Starting to explore ...")
 
-ow = objectwalker.core.ObjectWalker(filters=[EmptyFilter()], verbose=False)
+ow = objectwalker.core.ObjectWalker(verbose=False)
 ow.walk(sys, path=["sys"], maxdepth=5)
 
 print("[>] All done!")
