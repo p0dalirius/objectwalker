@@ -16,6 +16,6 @@ class A(object):
 A_obj = A()
 
 print("[>] Starting to explore ...")
-ow = objectwalker.core.ObjectWalker(filters=[FilterObjectNameContains(values=["SECRET"])], verbose=False)
+ow = objectwalker.core.ObjectWalker(filters_accept=[FilterObjectNameContains(values=["SECRET"])], verbose=False)
 ow.walk(A_obj, path=["A_obj"], maxdepth=5)
 print("[>] All done!")

@@ -152,12 +152,12 @@ def callback(obj, path):
     print(path)
 
 print("[>] Starting to explore breadth first ...")
-ow = objectwalker.core.ObjectWalker(filters=[FilterPathEndsWith(values=["\"]"])], callback=callback, verbose=False)
+ow = objectwalker.core.ObjectWalker(filters_accept=[FilterPathEndsWith(values=["\"]"])], callback=callback, verbose=False)
 ow.walk(base, path=["base"], maxdepth=5, method="breadth")
 print("[>] All done!")
 
 print("[>] Starting to explore depth first ...")
-ow = objectwalker.core.ObjectWalker(filters=[FilterPathEndsWith(values=["\"]"])], callback=callback, verbose=False)
+ow = objectwalker.core.ObjectWalker(filters_accept=[FilterPathEndsWith(values=["\"]"])], callback=callback, verbose=False)
 ow.walk(base, path=["base"], maxdepth=5, method="depth")
 print("[>] All done!")
 
