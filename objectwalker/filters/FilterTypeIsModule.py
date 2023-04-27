@@ -38,25 +38,28 @@ class FilterTypeIsModule(EmptyFilter):
         return matches_filter
 
     def print_result(self, obj, path_to_obj):
-        # Print the found path
-        module_name, module_type, module_source_file = self.parse_module_name(str(obj))
-
-        if self.no_colors:
-            print("[%s] [module=%s] [module_type=%s] | %s" % (
-                    self.filter_name,
-                    module_name,
-                    module_type,
-                    '.'.join(path_to_obj)
-                )
-            )
+        if self.callback is not None:
+            self.callback(obj, path_to_obj)
         else:
-            print("[\x1b[95m%s\x1b[0m] [module=\x1b[1;91m%s\x1b[0m] [module_type=\x1b[94m%s\x1b[0m] | \x1b[1;92m%s\x1b[0m"  % (
-                    self.filter_name,
-                    module_name,
-                    module_type,
-                    '.'.join(path_to_obj)
+            # Print the found path
+            module_name, module_type, module_source_file = self.parse_module_name(str(obj))
+
+            if self.no_colors:
+                print("[%s] [module=%s] [module_type=%s] | %s" % (
+                        self.filter_name,
+                        module_name,
+                        module_type,
+                        '.'.join(path_to_obj)
+                    )
                 )
-            )
+            else:
+                print("[\x1b[95m%s\x1b[0m] [module=\x1b[1;91m%s\x1b[0m] [module_type=\x1b[94m%s\x1b[0m] | \x1b[1;92m%s\x1b[0m"  % (
+                        self.filter_name,
+                        module_name,
+                        module_type,
+                        '.'.join(path_to_obj)
+                    )
+                )
 
     def parse_module_name(self, module_str):
         module_name, module_type, module_source_file = None, None, None

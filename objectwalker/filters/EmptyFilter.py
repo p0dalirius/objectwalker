@@ -10,7 +10,7 @@ class EmptyFilter(object):
     """
 
     no_colors = False
-
+    callback = None
     filter_name = "EmptyFilter"
 
     def __init__(self, no_colors=False):
@@ -22,26 +22,35 @@ class EmptyFilter(object):
         return True
 
     def print_result(self, obj, path_to_obj):
-        # Print the found path
-        obj_value = str(obj)[:50]
-        obj_value = str(bytes(obj_value, 'utf-8'))[2:-1]
-
-        if self.no_colors:
-            print("[%s] [type=%s] [value=%s] | %s" % (
-                    self.filter_name,
-                    str(type(obj)),
-                    obj_value,
-                    '.'.join(path_to_obj)
-                )
-            )
+        if self.callback is not None:
+            self.callback(obj, path_to_obj)
         else:
-            print("[\x1b[95m%s\x1b[0m] [type=\x1b[1;91m%s\x1b[0m] [value=\x1b[94m%s\x1b[0m] | \x1b[1;92m%s\x1b[0m"  % (
-                    self.filter_name,
-                    str(type(obj)),
-                    obj_value,
-                    '.'.join(path_to_obj)
+            # Print the found path
+            obj_value = str(obj)[:50]
+            obj_value = str(bytes(obj_value, 'utf-8'))[2:-1]
+
+            if self.no_colors:
+                print("[%s] [type=%s] [value=%s] | %s" % (
+                        self.filter_name,
+                        str(type(obj)),
+                        obj_value,
+                        '.'.join(path_to_obj)
+                    )
                 )
-            )
+            else:
+                print("[\x1b[95m%s\x1b[0m] [type=\x1b[1;91m%s\x1b[0m] [value=\x1b[94m%s\x1b[0m] | \x1b[1;92m%s\x1b[0m"  % (
+                        self.filter_name,
+                        str(type(obj)),
+                        obj_value,
+                        '.'.join(path_to_obj)
+                    )
+                )
 
     def __repr__(self):
         return "<%s>" % self.filter_name
+
+    def get_callback(self):
+        return self.callback
+
+    def set_callback(self, value):
+        self.callback = value
