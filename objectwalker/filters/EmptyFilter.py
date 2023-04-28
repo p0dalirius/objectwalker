@@ -6,7 +6,9 @@
 
 class EmptyFilter(object):
     """
-    Documentation for class EmptyFilter
+    class EmptyFilter
+
+    Default filter, matches every path without constraints
     """
 
     no_colors = False
