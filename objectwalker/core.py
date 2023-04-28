@@ -51,18 +51,19 @@ class ObjectWalker(object):
             print("[!] Unknown method.")
             return None
 
-    def find_in_threads(self, maxdepth=3, verbose=False, method="breadth"):
+    def find_in_threads(self, maxdepth=3, verbose=False, skip_threads_name=["MainThread"], method="breadth"):
         import threading
         results = []
         for thread_id, thread in threading._active.items():
-            path = ["threading._active[%d]._target" % thread_id]
-            print("[>] Exploring Thread %s" % thread)
-            if "breadth" in method.strip().lower():
-                results += self.walk_breadth_first(thread._target, path=path, depth=0, maxdepth=maxdepth, verbose=verbose)
-            elif "depth" in method.strip().lower():
-                results += self.walk_depth_first(thread._target, path=path, depth=0, maxdepth=maxdepth, verbose=verbose)
-            else:
-                print("[!] Unknown method.")
+            if threading._active[thread_id]._name not in skip_threads_name:
+                path = ["threading._active[%d]._target" % thread_id]
+                print("[>] Exploring Thread %s" % thread)
+                if "breadth" in method.strip().lower():
+                    results += self.walk_breadth_first(thread._target, path=path, depth=0, maxdepth=maxdepth, verbose=verbose)
+                elif "depth" in method.strip().lower():
+                    results += self.walk_depth_first(thread._target, path=path, depth=0, maxdepth=maxdepth, verbose=verbose)
+                else:
+                    print("[!] Unknown method.")
         return results
 
     def walk_depth_first(self, obj, found=[], path=[], depth=0, maxdepth=3, verbose=False):
@@ -166,101 +167,61 @@ class ObjectWalker(object):
             path = ["obj"]
 
         if depth < maxdepth:
-            # Exploring dict objects
+            # Prepare objects for exploration
+            objtree = {}
             if type(obj) == dict:
-                for subkey in obj.keys():
-                    if type(obj[subkey]) in [bool]:
-                        continue
+                objtree = obj
+            elif type(obj) == list:
+                objtree = {
+                    index: obj[index]
+                    for index in range(len(obj))
+                }
+            else:
+                objtree = {}
+                for _property in sorted(dir(obj)):
                     try:
-                        try:
-                            path_to_obj = path[:]
+                        objtree[_property] = eval("obj.%s" % _property, {"obj": obj})
+                    except (SyntaxError, ValueError, KeyError, TypeError, AttributeError) as e:
+                        continue
+
+            # Exploring objects
+            for subkey, subobj in objtree.items():
+                if type(subobj) in [bool]:
+                    continue
+                try:
+                    if int(id(subobj)) not in self.knownids:
+                        # Format the subkey
+                        path_to_obj = path[:]
+                        # Object is a dict
+                        if type(obj) == dict:
                             if type(subkey) == int:
                                 path_to_obj[-1] += '[%d]' % subkey
-                                subobj = eval('obj[%d]' % subkey, {"obj": obj})
                             elif type(subkey) == str:
                                 path_to_obj[-1] += '["%s"]' % subkey
-                                subobj = eval('obj["%s"]' % subkey, {"obj": obj})
                             else:
                                 path_to_obj[-1] += '["%s"]' % subkey
-                                subobj = eval('obj["%s"]' % subkey, {"obj": obj})
-                        except (SyntaxError, ValueError, KeyError, TypeError) as e:
-                            continue
+                        # Object is a list
+                        elif type(obj) == list:
+                            path_to_obj.append("[%d]" % subkey)
+                        # All other types
+                        else:
+                            path_to_obj.append(subkey)
 
-                        if int(id(subobj)) not in self.knownids:
-                            if not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
-                                if any([f.check(subobj, path_to_obj) for f in self.filters_accept]):
-                                    # Save the found path
-                                    found.append(path_to_obj)
-
-                            # Explore further if filters allow it
-                            if not any([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
-                                to_explore.append((subobj, path_to_obj, depth))
-
+                        # Save the found path if it matches filters (accept, and not reject)
+                        if not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
+                            if any([f.check(subobj, path_to_obj) for f in self.filters_accept]):
+                                found.append(path_to_obj)
+                        else:
                             # Save id of explored object
                             if int(id(subobj)) not in self.knownids:
                                 self.knownids.append(int(id(subobj)))
 
-                    except AttributeError as e:
-                        pass
+                        # Explore further if filters allow it
+                        if not any([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
+                            to_explore.append((subobj, path_to_obj, depth))
 
-            # Exploring list objects
-            elif type(obj) == list:
-                for index in range(len(obj)):
-                    if type(obj[index]) in [bool]:
-                        continue
-                    try:
-                        try:
-                            path_to_obj = path[:]
-                            path_to_obj[-1] += "[%d]" % index
-                            subobj = eval("obj[%d]" % index, {"obj": obj})
-                        except (SyntaxError, ValueError, KeyError, TypeError) as e:
-                            continue
-
-                        if int(id(subobj)) not in self.knownids:
-                            if not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
-                                if any([f.check(subobj, path_to_obj) for f in self.filters_accept]):
-                                    # Save the found path
-                                    found.append(path_to_obj)
-
-                            # Explore further if filters allow it
-                            if not any([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
-                                to_explore.append((subobj, path_to_obj, depth))
-
-                            # Save id of explored object
-                            if int(id(subobj)) not in self.knownids:
-                                self.knownids.append(int(id(subobj)))
-
-                    except AttributeError as e:
-                        pass
-
-            # Other objects
-            else:
-                for subkey in dir(obj):
-                    if type(subkey) in [bool]:
-                        continue
-                    try:
-                        try:
-                            path_to_obj = path + [subkey]
-                            subobj = eval("obj.%s" % subkey, {"obj": obj})
-                        except (SyntaxError, ValueError, KeyError, TypeError) as e:
-                            continue
-
-                        if int(id(subobj)) not in self.knownids:
-                            if not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
-                                if any([f.check(subobj, path_to_obj) for f in self.filters_accept]):
-                                    # Save the found path
-                                    found.append(path_to_obj)
-
-                            # Explore further if filters allow it
-                            if not any([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
-                                to_explore.append((subobj, path_to_obj, depth))
-
-                            # Save id of explored object
-                            if int(id(subobj)) not in self.knownids:
-                                self.knownids.append(int(id(subobj)))
-
-                    except AttributeError as e:
-                        pass
+                except AttributeError as e:
+                    pass
 
         if depth == 0:
             # Explore one more in depth, but only in top level function

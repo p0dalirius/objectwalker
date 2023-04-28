@@ -9,7 +9,9 @@ from .EmptyFilter import EmptyFilter
 
 class FilterObjectNameContains(EmptyFilter):
     """
-    Documentation for class FilterObjectNameContains
+    class FilterObjectNameContains
+
+    Filters
     """
     values = []
     no_colors = False
