@@ -10,7 +10,7 @@ import objectwalker
 from objectwalker.filters import *
 
 
-VERSION = "1.9.4"
+VERSION = "2.0"
 
 
 banner = r"""
@@ -36,7 +36,7 @@ def parseArgs():
 
     # Objects
     group_filters_objects = parser.add_argument_group("Filters on objects")
-    group_filters_objects.add_argument("--filter-object-is-module", default=[], type=str, action="append", help="Show paths from the base object leading to a specific module.")
+    group_filters_objects.add_argument("--filter-module", default=[], type=str, action="append", help="Show paths from the base object leading to a specific module.")
     #
     group_filters_objects.add_argument("--filter-object-name-equals", default=[], type=str, action="append", help="Show paths from the base object leading to an object name equals to <string>.")
     group_filters_objects.add_argument("--filter-object-name-contains", default=[], type=str, action="append", help="Show paths from the base object leading to an object name containing <string>.")
@@ -73,8 +73,8 @@ def main():
     filters = []
 
     # Filters on types
-    if len(options.filter_object_is_module) != 0:
-        filters.append(FilterTypeIsModule(modules=options.filter_object_is_module, no_colors=options.no_colors))
+    if len(options.filter_module) != 0:
+        filters.append(FilterTypeIsModule(modules=options.filter_module, no_colors=options.no_colors))
     if options.filter_type_module:
         filters.append(FilterTypeIsModule(no_colors=options.no_colors))
     if options.filter_type_method_wrapper:
@@ -122,7 +122,11 @@ def main():
     print("[>] Exploring object tree of module '%s' up to depth %d ..." % (options.module, options.max_depth))
     module = __import__(options.module)
     print("[+] Using %s" % str(module))
-    ow = objectwalker.ObjectWalker(filters=filters, verbose=options.verbose, no_colors=options.no_colors)
+    ow = objectwalker.ObjectWalker(
+        filters_accept=filters,
+        verbose=options.verbose,
+        no_colors=options.no_colors
+    )
     ow.walk(module, path=[options.module])
     print("[>] All done!")
 
