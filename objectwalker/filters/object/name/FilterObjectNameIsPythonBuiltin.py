@@ -4,7 +4,8 @@
 # Author             : Podalirius (@podalirius_)
 # Date created       : 26 Apr 2023
 
-from .EmptyFilter import EmptyFilter
+from objectwalker.filters.EmptyFilter import EmptyFilter
+
 
 class DummyEmptyClass(object):
     pass
