@@ -48,7 +48,7 @@ with open('requirements.txt', 'r', encoding='utf-8') as f:
 
 setuptools.setup(
     name="objectwalker",
-    version="2.0",
+    version="2.1",
     description="",
     url="https://github.com/p0dalirius/objectwalker",
     author="Podalirius",
@@ -56,7 +56,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     author_email="podalirius@protonmail.com",
     packages=["objectwalker", "objectwalker.filters"],
-    package_data={'objectwalker': ['objectwalker/', 'objectwalker/filters/']},
+    package_data={'objectwalker': ['objectwalker/', 'objectwalker/filters/', 'objectwalker/utils/', 'objectwalker/tests/']},
     include_package_data=True,
     license="GPL2",
     classifiers=[
