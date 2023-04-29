@@ -12,10 +12,18 @@ class ObjectWalker(object):
     Documentation for class ObjectWalker
     """
 
-    def __init__(self, filters_accept=[], filters_reject=[], filters_skip_exploration=[], callback=None, verbose=False, no_colors=False):
+    def __init__(self, filters_accept=[], filters_reject=[], filters_skip_exploration=[], matchmode_accept="any", matchmode_reject="any", matchmode_skip_exploration="any", callback=None, verbose=False, no_colors=False):
         super(ObjectWalker, self).__init__()
         self.verbose = verbose
         self.no_colors = no_colors
+
+        # Matchmode
+        self.filter_matchmode_accept = any
+        self.set_filter_matchmode_accept(matchmode_accept)
+        self.filter_matchmode_reject = any
+        self.set_filter_matchmode_reject(matchmode_reject)
+        self.filter_matchmode_skip_exploration = any
+        self.set_filter_matchmode_skip_exploration(matchmode_skip_exploration)
 
         # Filters
         self.filters_accept = filters_accept
@@ -92,13 +100,13 @@ class ObjectWalker(object):
                         except (SyntaxError, ValueError, KeyError, TypeError) as e:
                             continue
 
-                        if any([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
+                        if self.filter_matchmode_accept([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not self.filter_matchmode_reject([f.check(subobj, path_to_obj) for f in self.filters_reject]):
                             # Save the found path
                             found.append(path_to_obj)
                             input()
 
                         # Explore further
-                        if not any([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
+                        if not self.filter_matchmode_skip_exploration([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
                             if int(id(subobj)) not in self.knownids and False:
                                 self.knownids.append(int(id(subobj)))
                                 found = self.walk_depth_first(obj=subobj, found=found, path=path_to_obj, depth=(depth+1), maxdepth=maxdepth, verbose=verbose)
@@ -145,16 +153,18 @@ class ObjectWalker(object):
                         except (SyntaxError, ValueError, KeyError, TypeError) as e:
                             continue
 
-                        if any([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
-                            # Save the found path
-                            found.append(path_to_obj)
-                            input()
+                        # Save the found path if it matches filters (accept, and not reject)
+                        if not self.filter_matchmode_accept([f.check(subobj, path_to_obj) for f in self.filters_reject]):
+                            if self.filter_matchmode_reject([f.check(subobj, path_to_obj) for f in self.filters_accept]):
+                                found.append(path_to_obj)
+                        else:
+                            # Save id of explored object
+                            if int(id(subobj)) not in self.knownids:
+                                self.knownids.append(int(id(subobj)))
 
                         # Explore further
                         if not any([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
-                            if int(id(subobj)) not in self.knownids and False:
-                                self.knownids.append(int(id(subobj)))
-                                found = self.walk_depth_first(obj=subobj, found=found, path=path_to_obj, depth=(depth+1), maxdepth=maxdepth, verbose=verbose)
+                            found = self.walk_depth_first(obj=subobj, found=found, path=path_to_obj, depth=(depth+1), maxdepth=maxdepth, verbose=verbose)
 
                     except AttributeError as e:
                         pass
@@ -208,8 +218,8 @@ class ObjectWalker(object):
                             path_to_obj.append(subkey)
 
                         # Save the found path if it matches filters (accept, and not reject)
-                        if not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
-                            if any([f.check(subobj, path_to_obj) for f in self.filters_accept]):
+                        if not self.filter_matchmode_accept([f.check(subobj, path_to_obj) for f in self.filters_reject]):
+                            if self.filter_matchmode_reject([f.check(subobj, path_to_obj) for f in self.filters_accept]):
                                 found.append(path_to_obj)
                         else:
                             # Save id of explored object
@@ -217,7 +227,7 @@ class ObjectWalker(object):
                                 self.knownids.append(int(id(subobj)))
 
                         # Explore further if filters allow it
-                        if not any([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
+                        if not self.filter_matchmode_skip_exploration([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
                             to_explore.append((subobj, path_to_obj, depth))
 
                 except AttributeError as e:
@@ -253,3 +263,37 @@ class ObjectWalker(object):
         self.callback = fcallback
         for f in self.filters_accept:
             f.set_callback(fcallback)
+
+
+    def get_filter_matchmode_accept(self):
+        return self.filter_matchmode_accept
+
+    def set_filter_matchmode_accept(self, matchmode):
+        if matchmode == "any":
+            self.filter_matchmode_accept = any
+        elif matchmode == "all":
+            self.filter_matchmode_accept = all
+        else:
+            self.filter_matchmode_accept = any
+
+    def get_filter_matchmode_reject(self):
+        return self.filter_matchmode_reject
+
+    def set_filter_matchmode_reject(self, matchmode):
+        if matchmode == "any":
+            self.filter_matchmode_reject = any
+        elif matchmode == "all":
+            self.filter_matchmode_reject = all
+        else:
+            self.filter_matchmode_reject = any
+
+    def get_filter_matchmode_skip_exploration(self):
+        return self.filter_matchmode_skip_exploration
+
+    def set_filter_matchmode_skip_exploration(self, matchmode):
+        if matchmode == "any":
+            self.filter_matchmode_skip_exploration = any
+        elif matchmode == "all":
+            self.filter_matchmode_skip_exploration = all
+        else:
+            self.filter_matchmode_skip_exploration = any
