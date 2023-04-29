@@ -31,7 +31,7 @@ class FilterObjectValueStartsWith(EmptyFilter):
         regexmatcher = RegExMatcher(regular_expressions=self.regular_expressions)
         regexmatcher.set_all_regex_to_startswith()
 
-        if any([(str(obj).startswith(value)) for value in self.values]) or (regexmatcher.match(path_to_obj[-1])):
+        if any([(str(obj).startswith(value)) for value in self.values]) or (regexmatcher.match(str(obj))):
             matches_filter = True
 
         if matches_filter:

@@ -31,7 +31,7 @@ class FilterObjectValueContains(EmptyFilter):
         regexmatcher = RegExMatcher(regular_expressions=self.regular_expressions)
         regexmatcher.set_all_regex_to_contains()
 
-        if any([(value in str(obj)) for value in self.values]) or (regexmatcher.match(path_to_obj[-1])):
+        if any([(value in str(obj)) for value in self.values]) or (regexmatcher.match(str(obj))):
             matches_filter = True
 
         if matches_filter:
