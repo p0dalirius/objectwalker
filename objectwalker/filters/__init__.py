@@ -7,26 +7,12 @@
 # Generic base filter
 from .EmptyFilter import EmptyFilter
 
-# Filters on object names
-from .FilterObjectNameEquals import FilterObjectNameEquals
-from .FilterObjectNameContains import FilterObjectNameContains
-from .FilterObjectNameStartsWith import FilterObjectNameStartsWith
-from .FilterObjectNameEndsWith import FilterObjectNameEndsWith
-from .FilterObjectNameIsPythonBuiltin import FilterObjectNameIsPythonBuiltin
-
-# Filters on object values
-from .FilterObjectValueEquals import FilterObjectValueEquals
-from .FilterObjectValueContains import FilterObjectValueContains
-from .FilterObjectValueStartsWith import FilterObjectValueStartsWith
-from .FilterObjectValueEndsWith import FilterObjectValueEndsWith
+# Filters on objects
+from .object import *
 
 # Filters on path
-from .FilterPathContains import FilterPathContains
-from .FilterPathStartsWith import FilterPathStartsWith
-from .FilterPathEndsWith import FilterPathEndsWith
+from .path import *
 
 # Filters on type
-from .FilterTypeIsModule import FilterTypeIsModule
-from .FilterTypeIsMethodWrapper import FilterTypeIsMethodWrapper
-from .FilterTypeIsBuiltinFunctionOrMethod import FilterTypeIsBuiltinFunctionOrMethod
+from .type import *
 
