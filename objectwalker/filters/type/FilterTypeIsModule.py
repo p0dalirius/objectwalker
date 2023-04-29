@@ -5,7 +5,7 @@
 # Date created       : 26 Apr 2023
 
 import re
-from .EmptyFilter import EmptyFilter
+from objectwalker.filters.EmptyFilter import EmptyFilter
 
 
 class FilterTypeIsModule(EmptyFilter):
