@@ -27,10 +27,11 @@ class RegExMatcher(object):
                 regex = regex.decode("utf-8")
 
             if type(data) == type(regex):
-                is_matching = True
-                # For optimization, break at first match to avoid testing
-                # every other regular expression after one did match
-                break
+                if re.match(pattern=regex, string=data):
+                    is_matching = True
+                    # For optimization, break at first match to avoid testing
+                    # every other regular expression after one did match
+                    break
 
         return is_matching
 
