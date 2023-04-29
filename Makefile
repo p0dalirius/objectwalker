@@ -1,6 +1,6 @@
 .PHONY : all clean build upload
 
-all: install clean
+all: clean install tests
 
 clean:
 	@rm -rf `find ./ -type d -name "*__pycache__"`
@@ -16,8 +16,11 @@ install: build
 	python3 -m pip uninstall objectwalker --yes
 	python3 setup.py install
 
+tests: build
+	python3 ./objectwalker/tests/test_RegExMatcher.py
+
 build:
 	python3 setup.py sdist bdist_wheel
 
-upload: build
+upload: clean build
 	twine upload dist/*
