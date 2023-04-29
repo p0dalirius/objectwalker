@@ -4,7 +4,7 @@
 # Author             : Podalirius (@podalirius_)
 # Date created       : 26 Apr 2023
 
-from .EmptyFilter import EmptyFilter
+from objectwalker.filters.EmptyFilter import EmptyFilter
 
 
 class FilterPathEndsWith(EmptyFilter):
@@ -12,6 +12,7 @@ class FilterPathEndsWith(EmptyFilter):
     Documentation for class FilterPathEndsWith
     """
     values = []
+    regular_expressions = []
     no_colors = False
 
     filter_name = "FilterPathEndsWith"
@@ -25,7 +26,10 @@ class FilterPathEndsWith(EmptyFilter):
     def check(self, obj, path_to_obj):
         matches_filter = False
 
-        if any(['.'.join(path_to_obj).endswith(value) for value in self.values]):
+        regexmatcher = RegExMatcher(regular_expressions=self.regular_expressions)
+        regexmatcher.set_all_regex_to_endswith()
+
+        if any(['.'.join(path_to_obj).endswith(value) for value in self.values]) or (regexmatcher.match(path_to_obj[-1])):
             matches_filter = True
 
         if matches_filter:
@@ -35,4 +39,4 @@ class FilterPathEndsWith(EmptyFilter):
         return matches_filter
 
     def __repr__(self):
-        return "<%s values=%s>" % (self.filter_name, self.values)
+        return "<%s values=%s regular_expressions=%s>" % (self.filter_name, self.values, self.regular_expressions)
