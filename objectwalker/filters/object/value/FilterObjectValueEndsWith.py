@@ -18,7 +18,7 @@ class FilterObjectValueEndsWith(EmptyFilter):
 
     filter_name = "FilterObjectValueEndsWith"
 
-    def __init__(self, values, regular_expressions=[], no_colors=False):
+    def __init__(self, values=[], regular_expressions=[], no_colors=False):
         super(FilterObjectValueEndsWith, self).__init__()
         self.callback = self.print_result
         self.no_colors = no_colors

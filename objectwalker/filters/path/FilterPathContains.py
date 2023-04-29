@@ -17,11 +17,12 @@ class FilterPathContains(EmptyFilter):
 
     filter_name = "FilterPathContains"
 
-    def __init__(self, values, no_colors=False):
+    def __init__(self, values=[], regular_expressions=[], no_colors=False):
         super(EmptyFilter, self).__init__()
         self.callback = self.print_result
         self.no_colors = no_colors
         self.values = values
+        self.regular_expressions = regular_expressions
 
     def check(self, obj, path_to_obj):
         matches_filter = False
