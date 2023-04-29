@@ -154,8 +154,8 @@ class ObjectWalker(object):
                             continue
 
                         # Save the found path if it matches filters (accept, and not reject)
-                        if not self.filter_matchmode_accept([f.check(subobj, path_to_obj) for f in self.filters_reject]):
-                            if self.filter_matchmode_reject([f.check(subobj, path_to_obj) for f in self.filters_accept]):
+                        if not self.filter_matchmode_accept([f.check(subobj, path_to_obj) for f in self.filters_accept]):
+                            if self.filter_matchmode_reject([f.check(subobj, path_to_obj) for f in self.filters_reject]):
                                 found.append(path_to_obj)
                         else:
                             # Save id of explored object
@@ -218,8 +218,8 @@ class ObjectWalker(object):
                             path_to_obj.append(subkey)
 
                         # Save the found path if it matches filters (accept, and not reject)
-                        if not self.filter_matchmode_accept([f.check(subobj, path_to_obj) for f in self.filters_reject]):
-                            if self.filter_matchmode_reject([f.check(subobj, path_to_obj) for f in self.filters_accept]):
+                        if not self.filter_matchmode_accept([f.check(subobj, path_to_obj) for f in self.filters_accept]):
+                            if self.filter_matchmode_reject([f.check(subobj, path_to_obj) for f in self.filters_reject]):
                                 found.append(path_to_obj)
                         else:
                             # Save id of explored object
