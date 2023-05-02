@@ -119,16 +119,20 @@ def main():
         for filter in filters:
             print("  ├──> %s" % filter.__repr__())
 
-    print("[>] Exploring object tree of module '%s' up to depth %d ..." % (options.module, options.max_depth))
-    module = __import__(options.module)
-    print("[+] Using %s" % str(module))
-    ow = objectwalker.ObjectWalker(
-        filters_accept=filters,
-        verbose=options.verbose,
-        no_colors=options.no_colors
-    )
-    ow.walk(module, path=[options.module])
-    print("[>] All done!")
+    base = None
+    if options.module is not None:
+        print("[>] Exploring object tree of module '%s' up to depth %d ..." % (options.module, options.max_depth))
+        base = __import__(options.module)
+        print("[+] Using %s" % str(base))
+
+    if base is not None:
+        ow = objectwalker.ObjectWalker(
+            filters_accept=filters,
+            verbose=options.verbose,
+            no_colors=options.no_colors
+        )
+        ow.walk(base, path=[options.module])
+        print("[>] All done!")
 
 
 if __name__ == '__main__':
