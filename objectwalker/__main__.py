@@ -10,7 +10,7 @@ import objectwalker
 from objectwalker.filters import *
 
 
-VERSION = "2.1.4"
+VERSION = "2.1.5"
 
 
 banner = r"""
