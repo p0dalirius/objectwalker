@@ -12,7 +12,7 @@ from objectwalker.filters import *
 # https://podalirius.net/en/publications/grehack-2021-optimizing-ssti-payloads-for-jinja2/
 
 if __name__ == '__main__':
-    ow = objectwalker.core.ObjectWalker(filters_accept=[EmptyFilter()], verbose=False)
+    ow = objectwalker.core.ObjectWalker(filters_accept=[FilterTypeIsModule()], verbose=False)
 
     template_str = 'Hello {{ow.walk(self,path=["self"],maxdepth=5)}}'
     template = jinja2.Template(template_str)
