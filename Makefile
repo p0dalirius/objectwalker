@@ -12,8 +12,10 @@ docs:
 	@python3 -m pdoc -d markdown -o ./documentation/ ./objectwalker/
 	@echo "[$(shell date)] Done!"
 
-install: build
+uninstall:
 	python3 -m pip uninstall objectwalker --yes
+
+install: uninstall build
 	python3 setup.py install
 
 tests: build
