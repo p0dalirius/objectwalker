@@ -6,6 +6,7 @@
 
 from objectwalker.filters.EmptyFilter import EmptyFilter
 
+
 class FilterTypeIsMethodWrapper(EmptyFilter):
     """
     Documentation for class FilterTypeIsMethodWrapper

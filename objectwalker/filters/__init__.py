@@ -8,11 +8,11 @@
 from .EmptyFilter import EmptyFilter
 
 # Filters on objects
-from .object import *
+from .by_object import *
 
-# Filters on path
-from .path import *
+# Filters on by_path
+from .by_path import *
 
-# Filters on type
-from .type import *
+# Filters on by_type
+from .by_type import *
 
