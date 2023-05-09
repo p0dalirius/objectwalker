@@ -11,7 +11,7 @@ import objectwalker
 from objectwalker.filters import *
 
 
-class Server(by_object):
+class Server(object):
     """
     Documentation for class Server
     """

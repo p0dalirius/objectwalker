@@ -9,7 +9,7 @@ from objectwalker.filters import *
 
 SECRET = "UEHPAcW3TSaZAl6rVW32wwRTgl9lsVF"
 
-class A(by_object):
+class A(object):
     def __init__(self):
         super(A, self).__init__()
 

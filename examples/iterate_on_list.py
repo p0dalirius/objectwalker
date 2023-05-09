@@ -9,7 +9,7 @@ from objectwalker.filters import *
 
 base = [0, 1, 2, 32, 4, 84, {"SECRET": "UEHPAcW3TSaZAl6rVW32wwRTgl9lsVF"}, "ee", [0, {"SECRET": "UEHPAcW3TSaZAl6rVW32wwRTgl9lsVF"}]]
 
-class A(by_object):
+class A(object):
     def __init__(self):
         super(A, self).__init__()
 
