@@ -15,6 +15,12 @@ class FilterTypeIsMethodWrapper(EmptyFilter):
     filter_name = "FilterTypeIsMethodWrapper"
 
     def check(self, obj, path_to_obj):
+        """
+
+        :param obj:
+        :param path_to_obj:
+        :return:
+        """
         matches_filter = False
 
         if str(type(obj)) == "<class 'method-wrapper'>":
@@ -27,4 +33,8 @@ class FilterTypeIsMethodWrapper(EmptyFilter):
         return matches_filter
 
     def __repr__(self):
+        """
+
+        :return:
+        """
         return "<%s>" % self.filter_name

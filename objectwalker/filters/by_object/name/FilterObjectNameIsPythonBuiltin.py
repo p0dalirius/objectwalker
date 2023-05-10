@@ -41,6 +41,12 @@ class FilterObjectNameIsPythonBuiltin(EmptyFilter):
                     self.values.remove(g)
 
     def check(self, obj, path_to_obj):
+        """
+
+        :param obj:
+        :param path_to_obj:
+        :return:
+        """
         matches_filter = False
 
         if any([(str(path_to_obj[-1]) == value) for value in self.values]):
@@ -53,4 +59,8 @@ class FilterObjectNameIsPythonBuiltin(EmptyFilter):
         return matches_filter
 
     def __repr__(self):
+        """
+
+        :return:
+        """
         return "<%s values=%s>" % (self.filter_name, self.values)

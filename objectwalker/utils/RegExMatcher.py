@@ -17,6 +17,11 @@ class RegExMatcher(object):
         self.regular_expressions = regular_expressions
 
     def match(self, data):
+        """
+
+        :param data:
+        :return:
+        """
         is_matching = False
 
         for regex in self.regular_expressions:
@@ -36,6 +41,10 @@ class RegExMatcher(object):
         return is_matching
 
     def set_all_regex_to_startswith(self):
+        """
+
+        :return:
+        """
         new_list_of_regexes = []
         for regex in self.regular_expressions:
             if type(regex) == bytes:
@@ -56,6 +65,10 @@ class RegExMatcher(object):
         self.regular_expressions = new_list_of_regexes[:]
 
     def set_all_regex_to_endswith(self):
+        """
+
+        :return:
+        """
         new_list_of_regexes = []
         for regex in self.regular_expressions:
             if type(regex) == bytes:
@@ -76,6 +89,10 @@ class RegExMatcher(object):
         self.regular_expressions = new_list_of_regexes[:]
 
     def set_all_regex_to_contains(self):
+        """
+
+        :return:
+        """
         new_list_of_regexes = []
         for regex in self.regular_expressions:
             if type(regex) == bytes:
@@ -96,6 +113,10 @@ class RegExMatcher(object):
         self.regular_expressions = new_list_of_regexes[:]
 
     def set_all_regex_to_exactmatch(self):
+        """
+
+        :return:
+        """
         new_list_of_regexes = []
         for regex in self.regular_expressions:
             if type(regex) == bytes:

@@ -26,6 +26,12 @@ class FilterObjectNameEquals(EmptyFilter):
         self.regular_expressions = regular_expressions
 
     def check(self, obj, path_to_obj):
+        """
+
+        :param obj:
+        :param path_to_obj:
+        :return:
+        """
         matches_filter = False
 
         regexmatcher = RegExMatcher(regular_expressions=self.regular_expressions)
@@ -41,4 +47,8 @@ class FilterObjectNameEquals(EmptyFilter):
         return matches_filter
 
     def __repr__(self):
+        """
+
+        :return:
+        """
         return "<%s values=%s regular_expressions=%s>" % (self.filter_name, self.values, self.regular_expressions)

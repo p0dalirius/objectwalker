@@ -21,11 +21,23 @@ class EmptyFilter(object):
         self.no_colors = no_colors
 
     def check(self, obj, path_to_obj):
+        """
+
+        :param obj:
+        :param path_to_obj:
+        :return:
+        """
         if self.callback is not None:
             self.callback(obj, path_to_obj)
         return True
 
     def print_result(self, obj, path_to_obj):
+        """
+
+        :param obj:
+        :param path_to_obj:
+        :return:
+        """
         # Print the found path
         obj_value = str(obj)[:50]
         obj_value = str(bytes(obj_value, 'utf-8'))[2:-1]
@@ -48,10 +60,23 @@ class EmptyFilter(object):
             )
 
     def __repr__(self):
+        """
+
+        :return:
+        """
         return "<%s>" % self.filter_name
 
     def get_callback(self):
+        """
+
+        :return:
+        """
         return self.callback
 
     def set_callback(self, value):
+        """
+
+        :param value:
+        :return:
+        """
         self.callback = value

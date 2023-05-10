@@ -15,6 +15,12 @@ class FilterTypeIsBuiltinFunctionOrMethod(EmptyFilter):
     filter_name = "FilterTypeIsBuiltinFunctionOrMethod"
 
     def check(self, obj, path_to_obj):
+        """
+
+        :param obj:
+        :param path_to_obj:
+        :return:
+        """
         matches_filter = False
 
         if str(type(obj)) == "<class 'builtin_function_or_method'>":
@@ -27,4 +33,8 @@ class FilterTypeIsBuiltinFunctionOrMethod(EmptyFilter):
         return matches_filter
 
     def __repr__(self):
+        """
+
+        :return:
+        """
         return "<%s>" % self.filter_name

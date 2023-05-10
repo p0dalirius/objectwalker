@@ -25,6 +25,12 @@ class FilterTypeIsModule(EmptyFilter):
         self.modules = modules
 
     def check(self, obj, path_to_obj):
+        """
+
+        :param obj:
+        :param path_to_obj:
+        :return:
+        """
         matches_filter = False
         if str(type(obj)) == "<class 'module'>":
             if len(self.modules) == 0:
@@ -41,6 +47,12 @@ class FilterTypeIsModule(EmptyFilter):
         return matches_filter
 
     def print_result(self, obj, path_to_obj):
+        """
+
+        :param obj:
+        :param path_to_obj:
+        :return:
+        """
         # Print the found path
         module_name, module_type, module_source_file = self.parse_module_name(str(obj))
 
@@ -62,6 +74,11 @@ class FilterTypeIsModule(EmptyFilter):
             )
 
     def parse_module_name(self, module_str):
+        """
+
+        :param module_str:
+        :return:
+        """
         module_name, module_type, module_source_file = None, None, None
         matched = re.search("(<module '([^']+)' (\(built-in\)|\(frozen\)|from '([^']+)')>)", module_str)
         if matched is not None:
@@ -73,4 +90,8 @@ class FilterTypeIsModule(EmptyFilter):
         return module_name, module_type, module_source_file
 
     def __repr__(self):
+        """
+
+        :return:
+        """
         return "<%s>" % self.filter_name
