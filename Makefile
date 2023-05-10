@@ -13,16 +13,16 @@ docs:
 	@echo "[$(shell date)] Done!"
 
 uninstall:
-	python3 -m pip uninstall objectwalker --yes
+	@python3 -m pip uninstall objectwalker --yes
 
 install: uninstall build
-	python3 setup.py install
+	@python3 setup.py install
 
 tests: build
-	python3 ./objectwalker/tests/test_RegExMatcher.py
+	@python3 ./objectwalker/tests/start_tests.py
 
 build:
-	python3 setup.py sdist bdist_wheel
+	@python3 setup.py sdist bdist_wheel
 
 upload: clean build
-	twine upload dist/*
+	@twine upload dist/*

@@ -353,3 +353,16 @@ class ObjectWalker(object):
             self.filter_matchmode_skip_exploration = all
         else:
             self.filter_matchmode_skip_exploration = any
+
+    def set_no_print(self):
+        """
+
+        :param value:
+        :return:
+        """
+        for f in self.filters_accept:
+            f.set_callback(None)
+        for f in self.filters_reject:
+            f.set_callback(None)
+        for f in self.filters_skip_exploration:
+            f.set_callback(None)

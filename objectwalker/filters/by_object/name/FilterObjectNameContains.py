@@ -12,7 +12,6 @@ class FilterObjectNameContains(EmptyFilter):
     """
     class FilterObjectNameContains
 
-    Filters
     """
     values = []
     regular_expressions = []

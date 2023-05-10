@@ -89,8 +89,3 @@ class Test_RegExMatcher(unittest.TestCase):
         r.set_all_regex_to_exactmatch()
 
         self.assertEqual(expected, r.regular_expressions)
-
-
-if __name__ == '__main__':
-    unittest.main()
-
