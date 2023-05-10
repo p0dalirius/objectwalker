@@ -79,120 +79,8 @@ class ObjectWalker(object):
             path = ["obj"]
 
         if depth < maxdepth:
-
-            # Exploring dict objects
-            if type(obj) == dict:
-                for subkey in obj.keys():
-                    if type(obj[subkey]) in [bool]:
-                        continue
-                    try:
-                        try:
-                            path_to_obj = path[:]
-                            if type(subkey) == int:
-                                path_to_obj[-1] += '[%d]' % subkey
-                                subobj = eval('obj[%d]' % subkey, {"obj": obj})
-                            elif type(subkey) == str:
-                                path_to_obj[-1] += '["%s"]' % subkey
-                                subobj = eval('obj["%s"]' % subkey, {"obj": obj})
-                            else:
-                                path_to_obj[-1] += '["%s"]' % subkey
-                                subobj = eval('obj["%s"]' % subkey, {"obj": obj})
-                        except (SyntaxError, ValueError, KeyError, TypeError) as e:
-                            continue
-
-                        if self.filter_matchmode_accept([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not self.filter_matchmode_reject([f.check(subobj, path_to_obj) for f in self.filters_reject]):
-                            # Save the found path
-                            found.append(path_to_obj)
-                            input()
-
-                        # Explore further
-                        if not self.filter_matchmode_skip_exploration([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
-                            if int(id(subobj)) not in self.knownids and False:
-                                self.knownids.append(int(id(subobj)))
-                                found = self.walk_depth_first(obj=subobj, found=found, path=path_to_obj, depth=(depth+1), maxdepth=maxdepth, verbose=verbose)
-
-                    except AttributeError as e:
-                        pass
-
-            # Exploring list objects
-            elif type(obj) == list:
-                for index in range(len(obj)):
-                    if type(obj[index]) in [bool]:
-                        continue
-                    try:
-                        try:
-                            path_to_obj = path[:]
-                            path_to_obj[-1] += "[%d]" % index
-                            subobj = eval("obj[%d]" % index, {"obj": obj})
-                        except (SyntaxError, ValueError, KeyError, TypeError) as e:
-                            continue
-
-                        if any([f.check(subobj, path_to_obj) for f in self.filters_accept]) and not any([f.check(subobj, path_to_obj) for f in self.filters_reject]):
-                            # Save the found path
-                            found.append(path_to_obj)
-                            input()
-
-                        # Explore further
-                        if not any([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
-                            if int(id(subobj)) not in self.knownids and False:
-                                self.knownids.append(int(id(subobj)))
-                                found = self.walk_depth_first(obj=subobj, found=found, path=path_to_obj, depth=(depth+1), maxdepth=maxdepth, verbose=verbose)
-
-                    except AttributeError as e:
-                        pass
-
-            # Other objects
-            else:
-                for subkey in dir(obj):
-                    if type(subkey) in [bool]:
-                        continue
-                    try:
-                        try:
-                            path_to_obj = path + [subkey]
-                            subobj = eval("obj.%s" % subkey, {"obj": obj})
-                        except (SyntaxError, ValueError, KeyError, TypeError) as e:
-                            continue
-
-                        # Save the found path if it matches filters (accept, and not reject)
-                        if not self.filter_matchmode_accept([f.check(subobj, path_to_obj) for f in self.filters_accept]):
-                            if self.filter_matchmode_reject([f.check(subobj, path_to_obj) for f in self.filters_reject]):
-                                found.append(path_to_obj)
-                        else:
-                            # Save id of explored object
-                            if int(id(subobj)) not in self.knownids:
-                                self.knownids.append(int(id(subobj)))
-
-                        # Explore further
-                        if not any([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
-                            found = self.walk_depth_first(obj=subobj, found=found, path=path_to_obj, depth=(depth+1), maxdepth=maxdepth, verbose=verbose)
-
-                    except AttributeError as e:
-                        pass
-        return found
-
-    def walk_breadth_first(self, obj, found=[], path=[], depth=0, maxdepth=3, verbose=False):
-        to_explore = []
-
-        if depth == 0 and len(path) == 0:
-            path = ["obj"]
-
-        if depth < maxdepth:
             # Prepare objects for exploration
-            objtree = {}
-            if type(obj) == dict:
-                objtree = obj
-            elif type(obj) == list:
-                objtree = {
-                    index: obj[index]
-                    for index in range(len(obj))
-                }
-            else:
-                objtree = {}
-                for _property in sorted(dir(obj)):
-                    try:
-                        objtree[_property] = eval("obj.%s" % _property, {"obj": obj})
-                    except (SyntaxError, ValueError, KeyError, TypeError, AttributeError) as e:
-                        continue
+            objtree = self.__prepare_objtree(obj)
 
             # Exploring objects
             for subkey, subobj in objtree.items():
@@ -209,7 +97,58 @@ class ObjectWalker(object):
                             elif type(subkey) == str:
                                 path_to_obj[-1] += '["%s"]' % subkey
                             else:
+                                path_to_obj[-1] += '["%s"]' % str(subkey)
+                        # Object is a list
+                        elif type(obj) == list:
+                            path_to_obj.append("[%d]" % subkey)
+                        # All other types
+                        else:
+                            path_to_obj.append(subkey)
+
+                        # Save the found path if it matches filters (accept, and not reject)
+                        if not self.filter_matchmode_accept([f.check(subobj, path_to_obj) for f in self.filters_accept]):
+                            if self.filter_matchmode_reject([f.check(subobj, path_to_obj) for f in self.filters_reject]):
+                                found.append(path_to_obj)
+                        else:
+                            # Save id of explored object
+                            if int(id(subobj)) not in self.knownids:
+                                self.knownids.append(int(id(subobj)))
+
+                        # Explore further if filters allow it
+                        if not self.filter_matchmode_skip_exploration([f.check(subobj, path_to_obj) for f in self.filters_skip_exploration]):
+                            found = self.walk_depth_first(obj=subobj, found=found, path=path_to_obj, depth=(depth+1), maxdepth=maxdepth, verbose=verbose)
+
+                except AttributeError as e:
+                    pass
+
+        return found
+
+    def walk_breadth_first(self, obj, found=[], path=[], depth=0, maxdepth=3, verbose=False):
+        to_explore = []
+
+        if depth == 0 and len(path) == 0:
+            path = ["obj"]
+
+        if depth < maxdepth:
+            # Prepare objects for exploration
+            objtree = self.__prepare_objtree(obj)
+
+            # Exploring objects
+            for subkey, subobj in objtree.items():
+                if type(subobj) in [bool]:
+                    continue
+                try:
+                    if int(id(subobj)) not in self.knownids:
+                        # Format the subkey
+                        path_to_obj = path[:]
+                        # Object is a dict
+                        if type(obj) == dict:
+                            if type(subkey) == int:
+                                path_to_obj[-1] += '[%d]' % subkey
+                            elif type(subkey) == str:
                                 path_to_obj[-1] += '["%s"]' % subkey
+                            else:
+                                path_to_obj[-1] += '["%s"]' % str(subkey)
                         # Object is a list
                         elif type(obj) == list:
                             path_to_obj.append("[%d]" % subkey)
@@ -248,7 +187,24 @@ class ObjectWalker(object):
                     )
                 to_explore = next_to_explore[:]
         return to_explore
-    
+
+    def __prepare_objtree(self, obj):
+        objtree = {}
+        if type(obj) == dict:
+            objtree = obj
+        elif type(obj) == list:
+            objtree = {
+                index: obj[index]
+                for index in range(len(obj))
+            }
+        else:
+            objtree = {}
+            for _property in sorted(dir(obj)):
+                try:
+                    objtree[_property] = eval("obj.%s" % _property, {"obj": obj})
+                except (SyntaxError, ValueError, KeyError, TypeError, AttributeError) as e:
+                    continue
+        return objtree
     
     def get_verbose(self):
         return self.verbose
