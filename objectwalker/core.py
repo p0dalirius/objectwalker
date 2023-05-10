@@ -247,7 +247,7 @@ class ObjectWalker(object):
         objtree = {}
         if type(obj) == dict:
             objtree = obj
-        elif type(obj) == list:
+        elif type(obj) in [list, tuple]:
             objtree = {
                 index: obj[index]
                 for index in range(len(obj))
@@ -257,7 +257,7 @@ class ObjectWalker(object):
             for _property in sorted(dir(obj)):
                 try:
                     objtree[_property] = eval("obj.%s" % _property, {"obj": obj})
-                except (SyntaxError, ValueError, KeyError, TypeError, AttributeError) as e:
+                except (Exception) as e:
                     continue
         return objtree
     
