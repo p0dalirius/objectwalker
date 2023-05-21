@@ -3,7 +3,9 @@
 # File name          : core.py
 # Author             : Podalirius (@podalirius_)
 # Date created       : 26 Apr 2023
+import sys
 
+import objectwalker
 from .filters.EmptyFilter import EmptyFilter
 
 
@@ -46,13 +48,52 @@ class ObjectWalker(object):
 
         # Known objects
         self.knownids = []
-        self.knownids.append(id(self))
-        for f in filters_accept:
-            self.knownids.append(id(f))
-        for f in filters_reject:
-            self.knownids.append(id(f))
-        for f in filters_skip_exploration:
-            self.knownids.append(id(f))
+        # First ignore internal modules
+        __to_ignore = [
+            objectwalker,
+            objectwalker.core,
+            objectwalker.filters,
+            objectwalker.filters.by_object,
+            objectwalker.filters.by_object.name,
+            objectwalker.filters.by_object.name.FilterObjectNameContains,
+            objectwalker.filters.by_object.name.FilterObjectNameEndsWith,
+            objectwalker.filters.by_object.name.FilterObjectNameEquals,
+            objectwalker.filters.by_object.name.FilterObjectNameIsPythonBuiltin,
+            objectwalker.filters.by_object.name.FilterObjectNameStartsWith,
+            objectwalker.filters.by_object.value,
+            objectwalker.filters.by_object.value.FilterObjectValueContains,
+            objectwalker.filters.by_object.value.FilterObjectValueEndsWith,
+            objectwalker.filters.by_object.value.FilterObjectValueEquals,
+            objectwalker.filters.by_object.value.FilterObjectValueStartsWith,
+            objectwalker.filters.by_path,
+            objectwalker.filters.by_path.FilterPathContains,
+            objectwalker.filters.by_path.FilterPathEndsWith,
+            objectwalker.filters.by_path.FilterPathStartsWith,
+            objectwalker.filters.by_type,
+            objectwalker.filters.by_type.FilterTypeIsBuiltinFunctionOrMethod,
+            objectwalker.filters.by_type.FilterTypeIsMethodWrapper,
+            objectwalker.filters.by_type.FilterTypeIsModule,
+            objectwalker.filters.EmptyFilter,
+            objectwalker.__main__,
+            objectwalker.utils,
+            objectwalker.utils.RegExMatcher,
+            objectwalker.utils.Reporter
+        ]
+        __to_ignore += filters_accept
+        __to_ignore += filters_reject
+        __to_ignore += filters_skip_exploration
+        __to_ignore += [self]
+
+        # Add imported objectwalker modules from sys.modules
+        for modulename, module in sys.modules.items():
+            if modulename == "objectwalker" or modulename.startswith("objectwalker."):
+                print("Adding ", modulename)
+                __to_ignore.append(id(module))
+
+        for e in __to_ignore:
+            self.knownids.append(id(e))
+
+        print(self.knownids)
 
         # Callbacks
         for f in self.filters_reject:

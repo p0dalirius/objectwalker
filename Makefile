@@ -1,6 +1,6 @@
-.PHONY : all clean build upload
+.PHONY : all clean docs uninstall install tests build upload
 
-all: clean install tests
+all: clean uninstall install tests
 
 clean:
 	@rm -rf `find ./ -type d -name "*__pycache__"`
