@@ -6,6 +6,7 @@
 
 import re
 from objectwalker.filters.EmptyFilter import EmptyFilter
+import pdb
 
 
 class FilterTypeIsModule(EmptyFilter):
@@ -55,7 +56,8 @@ class FilterTypeIsModule(EmptyFilter):
         """
         # Print the found path
         module_name, module_type, module_source_file = self.parse_module_name(str(obj))
-
+        print(id(obj))
+        breakpoint()
         if self.no_colors:
             print("[%s] [module=%s] [module_type=%s] | %s" % (
                     self.filter_name,
