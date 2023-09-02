@@ -13,7 +13,7 @@ docs:
 	@echo "[$(shell date)] Done!"
 
 uninstall:
-	@python3 -m pip uninstall objectwalker --yes
+	@python3 -m pip uninstall objectwalker --yes --break-system-packages
 
 install: uninstall build
 	@python3 setup.py install

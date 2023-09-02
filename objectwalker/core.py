@@ -43,7 +43,7 @@ class ObjectWalker(object):
         self.filters_accept = filters_accept
         self.filters_reject = filters_reject
         self.filters_skip_exploration = filters_skip_exploration
-        if len(self.filters_accept) == 0 and len(self.filters_reject) == 0:
+        if len(self.filters_accept) == 0:
             self.filters_accept = [EmptyFilter()]
 
         # Known objects
@@ -87,13 +87,10 @@ class ObjectWalker(object):
         # Add imported objectwalker modules from sys.modules
         for modulename, module in sys.modules.items():
             if modulename == "objectwalker" or modulename.startswith("objectwalker."):
-                print("Adding ", modulename)
                 __to_ignore.append(id(module))
 
-        for e in __to_ignore:
-            self.knownids.append(id(e))
-
-        print(self.knownids)
+        for element in __to_ignore:
+            self.knownids.append(id(element))
 
         # Callbacks
         for f in self.filters_reject:
@@ -105,7 +102,6 @@ class ObjectWalker(object):
 
     def walk(self, obj, path=[], depth=0, maxdepth=3, verbose=False, method="breadth"):
         """
-
         :param obj:
         :param path:
         :param depth:
@@ -124,7 +120,6 @@ class ObjectWalker(object):
 
     def find_in_threads(self, maxdepth=3, verbose=False, skip_threads_name=["MainThread"], method="breadth"):
         """
-
         :param maxdepth:
         :param verbose:
         :param skip_threads_name:
@@ -138,16 +133,27 @@ class ObjectWalker(object):
                 path = ["threading._active[%d]._target" % thread_id]
                 print("[>] Exploring Thread %s" % thread)
                 if "breadth" in method.strip().lower():
-                    results += self.walk_breadth_first(thread._target, path=path, depth=0, maxdepth=maxdepth, verbose=verbose)
+                    results += self.walk_breadth_first(
+                        obj=thread._target,
+                        path=path,
+                        depth=0,
+                        maxdepth=maxdepth,
+                        verbose=verbose
+                    )
                 elif "depth" in method.strip().lower():
-                    results += self.walk_depth_first(thread._target, path=path, depth=0, maxdepth=maxdepth, verbose=verbose)
+                    results += self.walk_depth_first(
+                        obj=thread._target,
+                        path=path,
+                        depth=0,
+                        maxdepth=maxdepth,
+                        verbose=verbose
+                    )
                 else:
                     print("[!] Unknown method.")
         return results
 
     def walk_depth_first(self, obj, found=[], path=[], depth=0, maxdepth=3, verbose=False):
         """
-
         :param obj:
         :param found:
         :param path:
@@ -206,7 +212,6 @@ class ObjectWalker(object):
 
     def walk_breadth_first(self, obj, found=[], path=[], depth=0, maxdepth=3, verbose=False):
         """
-
         :param obj:
         :param found:
         :param path:
@@ -281,7 +286,6 @@ class ObjectWalker(object):
 
     def __prepare_objtree(self, obj):
         """
-
         :param obj: object
         :return: objtree: dict
         """
@@ -304,14 +308,12 @@ class ObjectWalker(object):
     
     def get_verbose(self):
         """
-
         :return:
         """
         return self.verbose
     
     def set_verbose(self, value):
         """
-
         :param value:
         :return:
         """
@@ -319,14 +321,12 @@ class ObjectWalker(object):
 
     def get_callback(self):
         """
-
         :return:
         """
         return self.callback
     
     def set_callback(self, fcallback):
         """
-
         :param fcallback:
         :return:
         """
@@ -334,10 +334,8 @@ class ObjectWalker(object):
         for f in self.filters_accept:
             f.set_callback(fcallback)
 
-
     def get_filter_matchmode_accept(self):
         """
-
         :return:
         """
         return self.filter_matchmode_accept
@@ -357,14 +355,12 @@ class ObjectWalker(object):
 
     def get_filter_matchmode_reject(self):
         """
-
         :return:
         """
         return self.filter_matchmode_reject
 
     def set_filter_matchmode_reject(self, matchmode):
         """
-
         :param matchmode:
         :return:
         """
@@ -377,14 +373,12 @@ class ObjectWalker(object):
 
     def get_filter_matchmode_skip_exploration(self):
         """
-
         :return:
         """
         return self.filter_matchmode_skip_exploration
 
     def set_filter_matchmode_skip_exploration(self, matchmode):
         """
-
         :param matchmode:
         :return:
         """
@@ -397,7 +391,6 @@ class ObjectWalker(object):
 
     def set_no_print(self):
         """
-
         :param value:
         :return:
         """
