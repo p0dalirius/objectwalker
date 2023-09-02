@@ -16,7 +16,7 @@ class Server(object):
     Documentation for class Server
     """
 
-    SECRET = "UEHPAcW3TSaZAl6rVW32wwRTgl9lsVF"
+    SECRET = "DuCTF{labisedepoda}"
 
     def __init__(self):
         super(Server, self).__init__()
@@ -32,12 +32,14 @@ if __name__ == '__main__':
 
     print("[>] Starting to explore ...")
     ow = objectwalker.core.ObjectWalker(
-        filters_accept=[FilterObjectNameContains(values=["SECRET"])],
+        filters_accept=[FilterObjectValueContains(regular_expressions=["[a-zA-Z0-9]+\{[^}]+\}"])],
         filters_reject=[FilterObjectNameIsPythonBuiltin(keep_gadgets=True)],
         filters_skip_exploration=[FilterObjectNameIsPythonBuiltin(keep_gadgets=True)],
         verbose=False
     )
-    ow.find_in_threads(maxdepth=10)
+    ow.find_in_threads(maxdepth=5)
     print("[>] All done!")
+
+    breakpoint()
 
     t.join()

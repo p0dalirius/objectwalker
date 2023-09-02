@@ -40,6 +40,30 @@ class RegExMatcher(object):
 
         return is_matching
 
+    def search(self, data):
+        """
+
+        :param data:
+        :return:
+        """
+        is_matching = False
+
+        for regex in self.regular_expressions:
+            # Prepare regex to match type
+            if type(data) == bytes and type(regex) == str:
+                regex = bytes(regex, "utf-8")
+            elif type(data) == str and type(regex) == bytes:
+                regex = regex.decode("utf-8")
+
+            if type(data) == type(regex):
+                if re.search(pattern=regex, string=data):
+                    is_matching = True
+                    # For optimization, break at first match to avoid testing
+                    # every other regular expression after one did match
+                    break
+
+        return is_matching
+
     def set_all_regex_to_startswith(self):
         """
 

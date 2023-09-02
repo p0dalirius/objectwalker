@@ -37,7 +37,7 @@ class FilterPathContains(EmptyFilter):
         regexmatcher = RegExMatcher(regular_expressions=self.regular_expressions)
         regexmatcher.set_all_regex_to_contains()
 
-        if any([value in '.'.join(path_to_obj) for value in self.values]) or (regexmatcher.match('.'.join(path_to_obj))):
+        if any([value in '.'.join(path_to_obj) for value in self.values]) or (regexmatcher.search('.'.join(path_to_obj))):
             matches_filter = True
 
         if matches_filter:
