@@ -18,7 +18,7 @@
 
 ## Demonstration
 
-https://user-images.githubusercontent.com/79218792/235144127-189d536c-b51c-495c-bcab-f803d806e90b.mp4
+https://github.com/p0dalirius/objectwalker/assets/79218792/179f4f27-12aa-4a88-8a82-122712ffd594
 
 ## Installation
 
